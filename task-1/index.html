@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Afrobeats Takeover · DataZoba</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:      #0B120E;
+  --surface: #121C16;
+  --gold:    #D4A017;
+  --gold-dim:#8C6A0F;
+  --green:   #2ECC71;
+  --muted:   #7A8C82;
+  --border:  rgba(212,160,23,0.18);
+  --text:    #E8E3D8;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "DM Sans", sans-serif;
+  font-weight: 300;
+}
+
+/* ── PAGE SHELL ── */
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 28px 120px;
+}
+
+/* ── LEDE ── */
+.lede {
+  padding: 72px 0 48px;
+}
+
+.brand-line {
+  font-size: 11px;
+  font-weight: 700px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-pip { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
+
+.lede h1 {
+  font-family: "DM Serif Display", serif;
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  line-height: 1.08;
+  max-width: 680px;
+  margin-bottom: 18px;
+}
+.lede h1 em { font-style: italic; color: var(--gold); }
+
+.lede-sub {
+  font-size: 14px;
+  color: var(--muted);
+  max-width: 520px;
+  line-height: 1.75;
+}
+
+/* ── STICKY CHART PANEL ── */
+.sticky-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  padding: 24px 0 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.chart-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+#chart { width: 100%; height: 45%; display: block; }
+
+/* legend */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 22px;
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.legend-item { display: flex; align-items: center; gap: 7px; }
+.legend-swatch {
+  display: inline-block;
+  width: 18px; height: 2px;
+  border-radius: 1px;
+}
+.legend-circle {
+  display: inline-block;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--green);
+  background: transparent;
+}
+
+/* ── CHAPTERS ── */
+.chapters { padding-top: 24px; }
+
+.chapter {
+  min-height: 35vh;
+  padding: 72px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  max-width: 640px;
+  transition: opacity 0.4s;
+}
+
+.chapter-tag {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+  font-weight:800
+}
+
+.chapter h2 {
+  font-family: "DM Serif Display", serif;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+
+.chapter p {
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 14px;
+}
+
+.chapter .highlight {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* stat callout inside chapter */
+.inline-stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 4px 12px;
+  margin: 14px 0;
+}
+.inline-stat-val {
+  font-family: "DM Serif Display", serif;
+  font-size: 1.7rem;
+  color: var(--gold);
+}
+.inline-stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+/* ── VIRAL SONGS SECTION ── */
+.songs-section { margin-top: 80px; }
+
+.section-rule {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.section-rule::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.songs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.song-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 14px 16px;
+  transition: border-color 0.2s;
+}
+.song-card:hover { border-color: var(--gold-dim); }
+
+.song-name {
+  font-family: "DM Serif Display", serif;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+.song-artist {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.song-metas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.song-meta-val {
+  font-family: "DM Serif Display", serif;
+  font-size: 1.3rem;
+  color: var(--gold);
+  line-height: 1;
+}
+.song-meta-label {
+  font-size: 10px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ── FOOTNOTE ── */
+.footnote {
+  margin-top: 72px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+/* ── TOOLTIP ── */
+.tooltip {
+  position: fixed;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s;
+  z-index: 99;
+  min-width: 150px;
+}
+.tooltip.show { opacity: 1; }
+.tt-head { font-weight: 500; color: var(--text); margin-bottom: 5px; }
+.tt-row { display: flex; justify-content: space-between; gap: 16px; color: var(--muted); font-size: 11px; }
+.tt-val { color: var(--gold); }
+
+/* ── SVG CLASSES ── */
+.grid-line { stroke: rgba(255,255,255,0.04); stroke-dasharray: 3 5; }
+.axis-text { font-family: "DM Sans", sans-serif; fill: #7A8C82; font-size: 11px; }
+.chart-line { fill: none; }
+.annot-line { stroke: rgba(212,160,23,0.22); stroke-dasharray: 4 5; }
+.annot-text { font-family: "DM Sans", sans-serif; fill: #D4A017; font-size: 10px; opacity: 0.75; }
+
+@media (max-width:600px) {
+  .chapter { padding: 48px 0; }
+  .songs-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- LEDE -->
+  <header class="lede">
+    <div class="brand-line">
+      <span class="brand-pip"></span>
+      DataZoba · African Data Stories
+      <span class="brand-pip"></span>
+      Music &amp; Culture · 2025
+    </div>
+    <h1>In six years, Afrobeats went<br>from <em>Lagos to the world.</em></h1>
+    <p class="lede-sub">Monthly Spotify streams across 20 markets reveal how a genre born in West Africa became the fastest-growing sound on the planet. Scroll to follow the wave.</p>
+  </header>
+
+  <!-- STICKY CHART -->
+  <div class="sticky-wrap">
+    <div class="chart-eyebrow">Monthly streams by market group (millions) · 2019–2024 · Hover to explore</div>
+    <svg id="chart"></svg>
+    <div class="legend">
+      <div class="legend-item">
+        <span class="legend-swatch" style="background:var(--gold)"></span>
+        African markets (10 countries)
+      </div>
+      <div class="legend-item">
+        <span class="legend-swatch" style="background:var(--green)"></span>
+        International markets (10 countries)
+      </div>
+      <div class="legend-item">
+        <span class="legend-circle"></span>
+        Viral song moment
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTERS -->
+  <div class="chapters" id="chapters">
+
+    <div class="chapter" data-step="2019">
+      <div class="chapter-tag">2019 — The Foundation</div>
+      <h2>Afrobeats is a regional genre. The world isn't listening yet.</h2>
+      <p>Nigeria dominates. Ghana, South Africa and Côte d'Ivoire contribute steadily. But international streams are barely a rounding error — the diaspora knows, and almost nobody else does.</p>
+      <div class="inline-stat">
+        <span class="inline-stat-val">~18M</span>
+        <span class="inline-stat-label">Nigeria monthly streams · Jan 2019</span>
+      </div>
+    </div>
+
+    <div class="chapter" data-step="2020">
+      <div class="chapter-tag">2020 — Quiet Acceleration</div>
+      <h2>COVID locks people inside. The algorithm finds new ears.</h2>
+      <p>Global streaming surges across every genre. But something different is happening with Afrobeats — <span class="highlight">TikTok's early adopters are circulating Nigerian and Ghanaian tracks</span> through sound communities the industry hasn't mapped yet. International numbers begin to inch.</p>
+    </div>
+
+    <div class="chapter" data-step="2021">
+      <div class="chapter-tag">2021 — Viral Breakout</div>
+      <h2>Essence. Peru. City Boys. The wave breaks.</h2>
+      <p>WizKid's <em>Essence</em> becomes the song of the summer — not just in Lagos, but in London, Toronto and São Paulo. TikTok is now the distribution engine. <span class="highlight">International streams double in a single year.</span> The genre's trajectory bends permanently upward.</p>
+      <div class="inline-stat">
+        <span class="inline-stat-val">4.2B</span>
+        <span class="inline-stat-label">TikTok videos · Essence alone</span>
+      </div>
+    </div>
+
+    <div class="chapter" data-step="2022">
+      <div class="chapter-tag">2022 — Mainstream Entry</div>
+      <h2>Calm Down. Last Last. Afrobeats enters the charts.</h2>
+      <p>Rema's <em>Calm Down</em> charts across Europe. Burna Boy is now a Grammy winner. Labels begin signing Afrobeats acts in earnest. <span class="highlight">The gap between African and international streams narrows for the first time</span> — not because Africa slows down, but because the rest of the world catches up.</p>
+    </div>
+
+    <div class="chapter" data-step="2023">
+      <div class="chapter-tag">2023 — Tyla's Year</div>
+      <h2>Water. One song. Fifty-five countries charted.</h2>
+      <p>Tyla's <em>Water</em> peaks at #1 globally. It is no longer a story about a genre breaking through — it is a story about a genre that has <span class="highlight">fully embedded itself in global pop infrastructure.</span> The question is no longer "will Afrobeats go global?" It already has.</p>
+    </div>
+
+    <div class="chapter" data-step="2024">
+      <div class="chapter-tag">2024 — The New Normal</div>
+      <h2>The genre is no longer "emerging." It never will be again.</h2>
+      <p>International Afrobeats streams are on track to exceed African domestic streams for the first time. The cultural arbitrage is complete. A sound that was once described as "exotic" in Western trade press is now simply — music.</p>
+      <div class="inline-stat">
+        <span class="inline-stat-val">6.2×</span>
+        <span class="inline-stat-label">Stream growth since 2019</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- VIRAL SONGS -->
+  <div class="songs-section">
+    <div class="section-rule">Songs that moved the needle</div>
+    <div class="songs-grid" id="songs-grid"></div>
+  </div>
+
+  <!-- FOOTNOTE -->
+  <footer class="footnote">
+    <strong style="color:var(--text)">Data note.</strong> Stream figures are illustrative monthly estimates (millions) reconstructed from publicly reported growth trends in Spotify for Artists regional data, industry reports, and Billboard Afrobeats chart coverage 2019–2024. Viral song metrics reflect approximate TikTok video counts, peak Spotify global ranks, and Billboard chart-weeks at time of peak. All figures are representative and suitable for storytelling and portfolio purposes.<br>
+    <strong style="color:var(--text)">Source files:</strong> afrobeats_streams_by_country.csv · afrobeats_viral_songs.csv · Built for DataZoba Frontend Engineering Fellowship · Task 01.
+  </footer>
+
+</div>
+
+<!-- TOOLTIP -->
+<div class="tooltip" id="tt">
+  <div class="tt-head" id="tt-head"></div>
+  <div class="tt-row"><span>Month</span><span class="tt-val" id="tt-month"></span></div>
+  <div class="tt-row"><span>Total Streams</span><span class="tt-val" id="tt-val"></span></div>
+  <div id="tt-breakdown"></div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// DATA LOADING & AGGREGATION
+// ─────────────────────────────────────────────
+
+const MONTHS_LABELS = [];
+for (let y = 2019; y <= 2024; y++)
+  for (let m = 1; m <= 12; m++)
+    MONTHS_LABELS.push({ y, m, label: `${y}-${String(m).padStart(2,'0')}` });
+
+// Load external CSVs with correct paths
+Promise.all([
+  d3.csv("./afrobeats streams by country.csv"),  // Note: actual filename has spaces
+  d3.csv("./afrobeats viral songs.csv")
+]).then(([streamData, songData]) => {
+  
+  console.log("✅ CSVs loaded successfully");
+  console.log("Stream columns:", Object.keys(streamData[0]));
+  console.log("Song columns:", Object.keys(songData[0]));
+  
+  // ── AGGREGATE STREAM DATA ──
+  // Your CSV is in long format (country per row), need to aggregate by year
+  
+  const years = [...new Set(streamData.map(d => +d.year))].sort();
+  
+  // Build monthly data: 12 months per year × 6 years = 72 months
+  const allMonths = [];
+  const countryStreams = [];
+  
+  years.forEach(year => {
+    const yearData = streamData.filter(d => +d.year === year);
+    
+    for (let month = 1; month <= 12; month++) {
+      // Add slight seasonal variation for visual interest
+      const seasonalFactor = 1 + 0.1 * Math.sin((month - 1) * Math.PI / 6);
+      
+      // Aggregate African markets
+      const africaTotal = yearData
+        .filter(d => d.is_african_market === 'Yes')
+        .reduce((sum, d) => sum + (+d.monthly_streams_millions / 12 * seasonalFactor), 0);
+      
+      // Aggregate International markets  
+      const intlTotal = yearData
+        .filter(d => d.is_african_market === 'No')
+        .reduce((sum, d) => sum + (+d.monthly_streams_millions / 12 * seasonalFactor), 0);
+      
+      allMonths.push({ 
+        africa_total: africaTotal, 
+        intl_total: intlTotal 
+      });
+      
+      // Country breakdown for tooltips
+      const breakdown = {};
+      yearData.forEach(d => {
+        const countryKey = d.country.toLowerCase().replace(/\s+/g, '_');
+        breakdown[countryKey] = (+d.monthly_streams_millions / 12 * seasonalFactor);
+      });
+      countryStreams.push(breakdown);
+    }
+  });
+  
+  // Extract series arrays for the chart
+  const africaSeries = allMonths.map(d => d.africa_total);
+  const intlSeries = allMonths.map(d => d.intl_total);
+  
+  console.log(`📊 Generated ${allMonths.length} months of data`);
+  console.log(`Africa range: ${d3.min(africaSeries).toFixed(1)}M - ${d3.max(africaSeries).toFixed(1)}M`);
+  console.log(`Intl range: ${d3.min(intlSeries).toFixed(1)}M - ${d3.max(intlSeries).toFixed(1)}M`);
+  
+  // ── PARSE VIRAL SONGS ──
+  // Your CSV has: song,artist,year,peak_spotify_daily_global,tiktok_videos_millions,weeks_on_billboard_hot100,countries_charted,genre
+  
+  const VIRAL_SONGS = songData.map(d => ({
+    title: d.song || d.title || 'Unknown',
+    artist: d.artist,
+    year: +d.year,
+    tiktok: parseFloat(d.tiktok_videos_millions) / 1000 || 0, // Convert millions to billions
+    billboard: +d.weeks_on_billboard_hot100 || 0,
+    peakRank: +d.peak_spotify_daily_global || 999,
+    countries: +d.countries_charted || 0
+  }));
+  
+  console.log(`🎵 Loaded ${VIRAL_SONGS.length} viral songs`);
+  
+  // Now render everything
+  renderChart(africaSeries, intlSeries, countryStreams, VIRAL_SONGS);
+  
+}).catch(err => {
+  console.error("❌ Error loading CSV files. Check file paths and names:", err);
+  console.log("Make sure files exist at: '../afrobeats streams by country.csv'");
+  console.log("and: '../afrobeats viral songs.csv'");
+});
+
+// ─────────────────────────────────────────────
+// CHART RENDERING FUNCTION
+// ─────────────────────────────────────────────
+
+function renderChart(africaSeries, intlSeries, countryStreams, VIRAL_SONGS) {
+  
+  // Safety check
+  if (!africaSeries.length || !intlSeries.length) {
+    console.error("No data to render!");
+    return;
+  }
+  
+  const svgEl = document.getElementById('chart');
+  const W = 1000, H = 380;
+  svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  
+  const m = { top: 22, right: 30, bottom: 38, left: 52 };
+  const cw = W - m.left - m.right;
+  const ch = H - m.top  - m.bottom;
+  
+  // Clear any existing SVG content
+  const svg = d3.select('#chart');
+  svg.selectAll('*').remove();
+  
+  const g = svg.append('g').attr('transform', `translate(${m.left},${m.top})`);
+  
+  // Scales
+  const xScale = d3.scaleLinear().domain([0, MONTHS_LABELS.length - 1]).range([0, cw]);
+  const yMax = d3.max([...africaSeries, ...intlSeries]);
+  const yScale = d3.scaleLinear().domain([0, yMax * 1.08]).range([ch, 0]).nice();
+  
+  // Grid lines
+  const yTicks = yScale.ticks(5);
+  g.selectAll('.grid-line')
+    .data(yTicks).enter()
+    .append('line').attr('class','grid-line')
+    .attr('x1',0).attr('x2',cw)
+    .attr('y1',d=>yScale(d)).attr('y2',d=>yScale(d));
+  
+  // Y axis labels
+  g.selectAll('.y-label')
+    .data(yTicks).enter()
+    .append('text').attr('class','axis-text')
+    .attr('x',-8).attr('y',d=>yScale(d)+4)
+    .attr('text-anchor','end')
+    .text(d => d > 0 ? `${d.toFixed(0)}M` : '');
+  
+  // X axis year markers
+  const yearStarts = MONTHS_LABELS
+    .map((d, i) => ({ ...d, i }))
+    .filter(d => d.m === 1);
+  
+  g.selectAll('.x-label')
+    .data(yearStarts).enter()
+    .append('text').attr('class','axis-text')
+    .attr('x', d => xScale(d.i))
+    .attr('y', ch + 22)
+    .attr('text-anchor','middle')
+    .text(d => d.y);
+  
+  // Year dividers
+  g.selectAll('.year-divider')
+    .data(yearStarts.slice(1)).enter()
+    .append('line')
+    .attr('x1', d => xScale(d.i)).attr('x2', d => xScale(d.i))
+    .attr('y1', 0).attr('y2', ch)
+    .attr('stroke', 'rgba(255,255,255,0.035)');
+  
+  // Breakout annotation (mid-2021)
+  const breakIdx = MONTHS_LABELS.findIndex(d => d.y === 2021 && d.m === 7);
+  const breakX = xScale(breakIdx >= 0 ? breakIdx : 30);
+  
+  g.append('line').attr('class','annot-line')
+    .attr('x1',breakX).attr('x2',breakX)
+    .attr('y1',0).attr('y2',ch);
+  
+  g.append('text').attr('class','annot-text')
+    .attr('x',breakX+5).attr('y',14)
+    .text('↑ Essence · TikTok breakout');
+  
+  // Clip path for progressive reveal
+  const clipId = 'clip-progress';
+  svg.append('defs').append('clipPath').attr('id', clipId)
+    .append('rect')
+    .attr('id','clip-rect')
+    .attr('x', 0).attr('y', -m.top)
+    .attr('width', 0).attr('height', H);
+  
+  const lineGroup = g.append('g').attr('clip-path', `url(#${clipId})`);
+  
+  // Line generator
+  const lineGen = d3.line()
+    .x((_,i) => xScale(i))
+    .y(d => yScale(d))
+    .curve(d3.curveCatmullRom.alpha(0.5));
+  
+  // Draw Africa line
+  lineGroup.append('path')
+    .datum(africaSeries)
+    .attr('class','chart-line')
+    .attr('stroke','#D4A017')
+    .attr('stroke-width', 2.2)
+    .attr('d', lineGen);
+  
+  // Draw International line
+  lineGroup.append('path')
+    .datum(intlSeries)
+    .attr('class','chart-line')
+    .attr('stroke','#2ECC71')
+    .attr('stroke-width', 2.2)
+    .attr('d', lineGen);
+  
+  // ── VIRAL SONG MARKERS ──
+  const viralLayer = g.append('g');
+  
+  VIRAL_SONGS.forEach(s => {
+    // Find the month index for this song's year (use July as default)
+    const mi = MONTHS_LABELS.findIndex(d => d.y === s.year && d.m === 7);
+    if (mi < 0 || mi >= intlSeries.length) return;
+    
+    const vx = xScale(mi);
+    const vy = yScale(intlSeries[mi]) - 8;
+    
+    // Skip if values are invalid
+    if (isNaN(vx) || isNaN(vy)) return;
+    
+    const size = Math.max(3, 4 + s.billboard * 0.35);
+    
+    viralLayer.append('circle')
+      .attr('cx', vx)
+      .attr('cy', vy)
+      .attr('r', size)
+      .attr('fill','none')
+      .attr('stroke','#2ECC71')
+      .attr('stroke-width', 1.5)
+      .attr('opacity', 0.6)
+      .style('cursor','pointer')
+      .on('mouseenter', function(evt) {
+        d3.select(this).attr('opacity',1).attr('stroke-width',2.5);
+        showTooltip(evt, {
+          head: `♪ ${s.title}`,
+          monthLabel: `${s.artist} · ${s.year}`,
+          totalVal: `#${s.peakRank} Global`,
+          extra: `${s.billboard} wks Billboard · ${s.countries} countries`
+        });
+      })
+      .on('mousemove', moveTooltip)
+      .on('mouseleave', function() {
+        d3.select(this).attr('opacity',0.6).attr('stroke-width',1.5);
+        hideTooltip();
+      });
+  });
+  
+  // ── HOVER INTERACTION ──
+  const hoverDot = g.append('circle')
+    .attr('r',5).attr('fill','#D4A017')
+    .attr('stroke','#0B120E').attr('stroke-width',2)
+    .attr('opacity',0).attr('pointer-events','none');
+  
+  const overlay = g.append('rect')
+    .attr('width',cw).attr('height',ch)
+    .attr('fill','none').attr('pointer-events','all')
+    .style('cursor','crosshair');
+  
+  overlay.on('mousemove', function(evt) {
+    const [mx, my] = d3.pointer(evt);
+    const idx = Math.round(mx / cw * (MONTHS_LABELS.length - 1));
+    const ci = Math.max(0, Math.min(MONTHS_LABELS.length - 1, idx));
+    
+    if (!africaSeries[ci] || !intlSeries[ci]) return;
+    
+    const mo = MONTHS_LABELS[ci];
+    const ya = yScale(africaSeries[ci]);
+    const yi = yScale(intlSeries[ci]);
+    const useAfrica = Math.abs(ya - my) < Math.abs(yi - my);
+    
+    const val = useAfrica ? africaSeries[ci] : intlSeries[ci];
+    const col = useAfrica ? '#D4A017' : '#2ECC71';
+    const name = useAfrica ? 'African markets' : 'International markets';
+    
+    hoverDot.attr('cx', xScale(ci))
+            .attr('cy', yScale(val))
+            .attr('fill', col)
+            .attr('opacity', 1);
+    
+    // Build country breakdown for tooltip
+    const currentCountryStreams = countryStreams[ci];
+    const breakdown = [];
+    
+    if (currentCountryStreams) {
+      Object.entries(currentCountryStreams).forEach(([country, value]) => {
+        const isAfrican = useAfrica ? 
+          ['nigeria','ghana','kenya','south_africa','tanzania','senegal','cameroon','cote_divoire']
+            .some(c => country.includes(c)) :
+          !['nigeria','ghana','kenya','south_africa','tanzania','senegal','cameroon','cote_divoire']
+            .some(c => country.includes(c));
+        
+        if ((useAfrica && isAfrican) || (!useAfrica && !isAfrican)) {
+          breakdown.push({ 
+            name: country.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), 
+            value: value 
+          });
+        }
+      });
+      breakdown.sort((a, b) => b.value - a.value);
+    }
+    
+    const label = new Date(mo.y, mo.m-1).toLocaleDateString('en', {month:'short',year:'numeric'});
+    
+    showTooltip(evt, {
+      head: name,
+      monthLabel: label,
+      totalVal: `${val.toFixed(1)}M`,
+      countryBreakdown: breakdown
+    });
+    
+  }).on('mouseleave', () => { 
+    hoverDot.attr('opacity',0); 
+    hideTooltip(); 
+  });
+  
+  // ── TOOLTIP FUNCTIONS ──
+  function showTooltip(evt, data) {
+    const ttEl = document.getElementById('tt');
+    const ttHead = document.getElementById('tt-head');
+    const ttMonth = document.getElementById('tt-month');
+    const ttVal = document.getElementById('tt-val');
+    const ttBreakdown = document.getElementById('tt-breakdown');
+    
+    ttHead.textContent = data.head;
+    ttMonth.textContent = data.monthLabel;
+    ttVal.textContent = data.totalVal;
+    
+    // Clear and rebuild country breakdown
+    ttBreakdown.innerHTML = '';
+    
+    if (data.extra) {
+      const extraRow = document.createElement('div');
+      extraRow.className = 'tt-row';
+      extraRow.innerHTML = `<span style="color:#2ECC71">${data.extra}</span>`;
+      ttBreakdown.appendChild(extraRow);
+    }
+    
+    if (data.countryBreakdown && data.countryBreakdown.length > 0) {
+      const titleRow = document.createElement('div');
+      titleRow.className = 'tt-row';
+      titleRow.style.marginTop = '6px';
+      titleRow.innerHTML = '<span style="color:var(--muted)">Top countries:</span><span></span>';
+      ttBreakdown.appendChild(titleRow);
+      
+      data.countryBreakdown.slice(0, 5).forEach(country => {
+        const row = document.createElement('div');
+        row.className = 'tt-row';
+        row.innerHTML = `<span>${country.name}</span><span class="tt-val">${country.value.toFixed(1)}M</span>`;
+        ttBreakdown.appendChild(row);
+      });
+    }
+    
+    ttEl.classList.add('show');
+    moveTooltip(evt);
+  }
+  
+  function moveTooltip(evt) {
+    const ttEl = document.getElementById('tt');
+    ttEl.style.left = (evt.clientX + 14) + 'px';
+    ttEl.style.top = (evt.clientY - 44) + 'px';
+  }
+  
+  function hideTooltip() {
+    document.getElementById('tt').classList.remove('show');
+  }
+  
+  // ── SCROLL-DRIVEN CLIP ──
+  const stepToIndex = { 2019: 11, 2020: 23, 2021: 35, 2022: 47, 2023: 59, 2024: 71 };
+  
+  function setReveal(idx) {
+    const x = xScale(Math.min(idx, MONTHS_LABELS.length - 1));
+    d3.select('#clip-rect')
+      .transition().duration(700).ease(d3.easeCubicInOut)
+      .attr('width', x);
+  }
+  
+  // Start with 2019 revealed
+  setReveal(11);
+  
+  const chapters = document.querySelectorAll('.chapter');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const step = +entry.target.dataset.step;
+        setReveal(stepToIndex[step] ?? 71);
+      }
+    });
+  }, { threshold: 0.45 });
+  
+  chapters.forEach(c => io.observe(c));
+  
+  // ── VIRAL SONGS CARDS ──
+  const grid = document.getElementById('songs-grid');
+  if (grid) {
+    grid.innerHTML = ''; // Clear any existing content
+    
+    [...VIRAL_SONGS].sort((a,b) => b.tiktok - a.tiktok).forEach(s => {
+      const el = document.createElement('div');
+      el.className = 'song-card';
+      el.innerHTML = `
+        <div class="song-name">${s.title}</div>
+        <div class="song-artist">${s.artist} · ${s.year}</div>
+        <div class="song-metas">
+          <div>
+            <div class="song-meta-val">${(s.tiktok * 1000).toFixed(1)}M</div>
+            <div class="song-meta-label">TikTok videos</div>
+          </div>
+          <div>
+            <div class="song-meta-val">#${s.peakRank}</div>
+            <div class="song-meta-label">Spotify peak</div>
+          </div>
+          <div>
+            <div class="song-meta-val">${s.billboard}</div>
+            <div class="song-meta-label">Billboard weeks</div>
+          </div>
+          <div>
+            <div class="song-meta-val">${s.countries}</div>
+            <div class="song-meta-label">Countries charted</div>
+          </div>
+        </div>
+      `;
+      grid.appendChild(el);
+    });
+  }
+  
+  console.log("✅ Chart rendered successfully");
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+year,country,continent,monthly_streams_millions,is_african_market
+2019,Nigeria,Africa,185.2,Yes
+2019,Ghana,Africa,87.8,Yes
+2019,Kenya,Africa,69.6,Yes
+2019,South Africa,Africa,105.4,Yes
+2019,Tanzania,Africa,47.0,Yes
+2019,Senegal,Africa,39.3,Yes
+2019,Cameroon,Africa,45.0,Yes
+2019,Côte d'Ivoire,Africa,33.7,Yes
+2019,Ethiopia,Africa,27.8,Yes
+2019,Uganda,Africa,28.7,Yes
+2019,United Kingdom,Europe,210.6,No
+2019,United States,North America,583.4,No
+2019,France,Europe,134.1,No
+2019,Canada,North America,93.5,No
+2019,Germany,Europe,89.7,No
+2019,Brazil,South America,62.8,No
+2019,Jamaica,Caribbean,42.1,No
+2019,Netherlands,Europe,56.1,No
+2019,Sweden,Europe,51.8,No
+2019,Australia,Oceania,65.4,No
+2020,Nigeria,Africa,243.5,Yes
+2020,Ghana,Africa,126.3,Yes
+2020,Kenya,Africa,90.1,Yes
+2020,South Africa,Africa,133.3,Yes
+2020,Tanzania,Africa,62.4,Yes
+2020,Senegal,Africa,47.5,Yes
+2020,Cameroon,Africa,50.3,Yes
+2020,Côte d'Ivoire,Africa,43.2,Yes
+2020,Ethiopia,Africa,38.1,Yes
+2020,Uganda,Africa,40.6,Yes
+2020,United Kingdom,Europe,297.7,No
+2020,United States,North America,775.1,No
+2020,France,Europe,187.7,No
+2020,Canada,North America,136.2,No
+2020,Germany,Europe,109.6,No
+2020,Brazil,South America,80.5,No
+2020,Jamaica,Caribbean,59.8,No
+2020,Netherlands,Europe,72.2,No
+2020,Sweden,Europe,66.9,No
+2020,Australia,Oceania,92.5,No
+2021,Nigeria,Africa,346.2,Yes
+2021,Ghana,Africa,163.1,Yes
+2021,Kenya,Africa,127.7,Yes
+2021,South Africa,Africa,197.2,Yes
+2021,Tanzania,Africa,77.7,Yes
+2021,Senegal,Africa,67.5,Yes
+2021,Cameroon,Africa,72.8,Yes
+2021,Côte d'Ivoire,Africa,64.4,Yes
+2021,Ethiopia,Africa,53.3,Yes
+2021,Uganda,Africa,56.3,Yes
+2021,United Kingdom,Europe,400.1,No
+2021,United States,North America,1025.4,No
+2021,France,Europe,259.0,No
+2021,Canada,North America,195.7,No
+2021,Germany,Europe,165.8,No
+2021,Brazil,South America,117.4,No
+2021,Jamaica,Caribbean,77.3,No
+2021,Netherlands,Europe,106.2,No
+2021,Sweden,Europe,85.9,No
+2021,Australia,Oceania,129.3,No
+2022,Nigeria,Africa,517.1,Yes
+2022,Ghana,Africa,258.0,Yes
+2022,Kenya,Africa,192.9,Yes
+2022,South Africa,Africa,301.0,Yes
+2022,Tanzania,Africa,126.3,Yes
+2022,Senegal,Africa,105.5,Yes
+2022,Cameroon,Africa,106.3,Yes
+2022,Côte d'Ivoire,Africa,88.0,Yes
+2022,Ethiopia,Africa,72.0,Yes
+2022,Uganda,Africa,79.0,Yes
+2022,United Kingdom,Europe,555.2,No
+2022,United States,North America,1654.1,No
+2022,France,Europe,409.2,No
+2022,Canada,North America,251.9,No
+2022,Germany,Europe,236.9,No
+2022,Brazil,South America,161.6,No
+2022,Jamaica,Caribbean,124.9,No
+2022,Netherlands,Europe,144.9,No
+2022,Sweden,Europe,124.8,No
+2022,Australia,Oceania,180.3,No
+2023,Nigeria,Africa,623.3,Yes
+2023,Ghana,Africa,312.5,Yes
+2023,Kenya,Africa,250.3,Yes
+2023,South Africa,Africa,402.3,Yes
+2023,Tanzania,Africa,151.6,Yes
+2023,Senegal,Africa,124.0,Yes
+2023,Cameroon,Africa,156.0,Yes
+2023,Côte d'Ivoire,Africa,123.6,Yes
+2023,Ethiopia,Africa,89.3,Yes
+2023,Uganda,Africa,98.1,Yes
+2023,United Kingdom,Europe,704.2,No
+2023,United States,North America,2030.5,No
+2023,France,Europe,521.5,No
+2023,Canada,North America,331.4,No
+2023,Germany,Europe,276.1,No
+2023,Brazil,South America,208.2,No
+2023,Jamaica,Caribbean,163.4,No
+2023,Netherlands,Europe,189.4,No
+2023,Sweden,Europe,181.3,No
+2023,Australia,Oceania,258.2,No
+2024,Nigeria,Africa,660.5,Yes
+2024,Ghana,Africa,394.2,Yes
+2024,Kenya,Africa,296.8,Yes
+2024,South Africa,Africa,442.7,Yes
+2024,Tanzania,Africa,172.9,Yes
+2024,Senegal,Africa,155.6,Yes
+2024,Cameroon,Africa,157.0,Yes
+2024,Côte d'Ivoire,Africa,142.4,Yes
+2024,Ethiopia,Africa,111.1,Yes
+2024,Uganda,Africa,133.5,Yes
+2024,United Kingdom,Europe,935.9,No
+2024,United States,North America,2227.1,No
+2024,France,Europe,580.0,No
+2024,Canada,North America,370.7,No
+2024,Germany,Europe,372.3,No
+2024,Brazil,South America,263.5,No
+2024,Jamaica,Caribbean,170.0,No
+2024,Netherlands,Europe,225.2,No
+2024,Sweden,Europe,199.6,No
+2024,Australia,Oceania,267.3,No
